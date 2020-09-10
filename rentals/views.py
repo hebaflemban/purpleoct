@@ -18,9 +18,7 @@ def membership_form(request):
 
     form = MembershipForm()
     if request.user.is_authenticated:
-
         if request.user.is_staff:
-
             if request.method == 'POST':
                 form = MembershipForm(request.POST, request.FILES)
 
@@ -43,15 +41,13 @@ def membership_form(request):
     }
     return render (request, 'membership_form.html', context)
 
-def notification(request):
 
+def notification(request):
     return render (request, 'notification.html')
 
 
 """
-
 coordinator access only operations + product CRUD poerations
-
 """
 def search_product(request):
     #if request.user.is_staff():
@@ -96,20 +92,19 @@ def return_product(request): #update?
 
 def add_product(request):
     p_form = ProductForm()
-    if request.user.is_authenticated:
-        if request.user.is_staff:
-            if request.method == 'POST':
-                p_form = ProductForm(request.POST, request.FILES)
-                if p_form.is_valid():
-                    p_form.save()
-                    messages.success(request, 'Product Added to shop successfully!')
-                    return redirect ('notification_page')
-        else:
-            messages.warning(request, 'You don\'t have access to this page')
-            return redirect ('notification_page')
-    else:
+    if not request.user.is_authenticated:
         return redirect ('login_page')
+    if not request.user.is_staff:
+        messages.warning(request, 'You don\'t have access to this page')
+        return redirect ('notification_page')
 
+    if request.method == 'POST':
+        p_form = ProductForm(request.POST, request.FILES)
+        if p_form.is_valid():
+            p_form.save()
+            messages.success(request, 'Product Added to shop successfully!')
+            return redirect ('notification_page')
+        
     context = {
         'p_form' : p_form,
     }
