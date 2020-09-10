@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %} Do your magic {{octopus.username}}! {% endblock title %}
+
+
+{% block content %}
+<div class="card">
+  <div class="card-body">
+    <div class="row text-center">
+        {% if request.user.is_staff %}
+        <div class="col-md-4">
+            <a href="{% url 'add_product_page' %}" class="btn btn-outline-success btn-block">Add Items</a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'membership_page' %}" class="btn btn-outline-success btn-block">Create a membership</a>
+        </div>
+        <div class="col-md-4">
+            <a href="#" class="btn btn-outline-success btn-block">Product Search</a>
+        </div>
+        <!-- <div class="col-md-4">
+            <a href="{% url 'rent_product_page' product.id%}" class="btn btn-outline-success btn-block">Rent/Return</a>
+        </div> -->
+        {% endif %}
+    </div>
+  </div>
+
+</div>
+{% endblock content %}

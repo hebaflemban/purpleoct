@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+#AUTH_PROFILE_MODULE = 'rentals.UserProfile'
 # Application definition
 
 INSTALLED_APPS = [
@@ -39,9 +39,20 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rentals',
     'crispy_forms',
+    'phonenumber_field',
 ]
 
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+# CRISPY_TEMPLATE_PACK = 'bootstrap4'
+# #SENDGRID_API_KEY = os.environ["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"]
+#
+# #SENDGRID_API_KEY = os.getenv('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')
+# EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+# EMAIL_HOST = 'smtp.sendgrid.net'
+# EMAIL_HOST_USER = 'apikey'
+# EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

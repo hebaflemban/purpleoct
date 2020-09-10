@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}{{product.category}}{% endblock title %}
+
+{% block content %}
+
+<div class="card">
+  <h5 class="card-header">Rental Info</h5>
+  {% if product.img %}
+    <img class="card-img-top" src="{{product.img.url}}" alt="Hey Noob, look at me...">
+  {% endif %}
+  <div class="card-body">
+    <h5 class="card-title">{{product.name}}</h5>
+    <p class="card-text">{{product.description|linebreaks}}</p>
+    <p class="card-text">{{product.is_rented}}</p>
+    <p class="card-text">{{product.quantity}}</p>
+  </div>
+
+
+  <div class="card-body">
+    <div class="row text-center">
+        {% if request.user.is_staff %}
+            <div class="col-md-4">
+                <a href="{% url 'edit_product_page' product.id %}" class="btn btn-outline-primary btn-block">Update</a>
+            </div>
+            <div class="col-md-4">
+                <a href="{% url 'delete_product_page' product.id %}" class="btn btn-outline-danger btn-block">Delete</a>
+            </div>
+        {% endif %}
+    </div>
+  </div>
+
+</div>
+{% endblock content %}

@@ -1,26 +1,35 @@
 from django.shortcuts import render, redirect
-from .forms import MembershipForm, LoginForm, ProductForm
+from .forms import MembershipForm, LoginForm, ProductForm, ProductRent
 from .models import Product
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
-
+from django.contrib.auth.models import User
+from django.core.mail import send_mail
 
 
 
 def membership_form(request):
+    # send_mail(
+    #     subject = 'That’s your subject',
+    #     message = 'That’s your message body',
+    #     from_email = 'flembanheba@gmail.com',
+    #     recipient_list = ['flemban2@illinois.edu']
+    # )
+
     form = MembershipForm()
     if request.user.is_authenticated:
+
         if request.user.is_staff:
+
             if request.method == 'POST':
                 form = MembershipForm(request.POST, request.FILES)
+
                 if form.is_valid():
                     user = form.save(commit=False)
                     user.set_password(user.password)
                     user.save()
-
-                    messages.success(request, 'Membership created successfully, Welcome!')
+                    messages.success(request, 'Membership created successfully, Check your email!')
                     return redirect ('notification_page')
-
         else:
             messages.warning(request, 'Ask a coordinato for help!')
             return redirect ('notification_page')
@@ -54,12 +63,29 @@ def search_product(request):
     return render (request, '.html', context)
 
 
-def rent_product(request):
-    #if request.user.is_staff():
-    context = {
+def rent_product(request, product_id):
+    product = Product.objects.get(id=product_id)
+    form = ProductRent(instance = product)
 
+    if request.user.is_authenticated:
+        if request.user.is_staff:
+            form = ProductRent(instance = product)
+            if request.method == 'POST':
+                form = ProductRent(request.POST, request.FILES, instance = product)
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, 'Product Rented!')
+                    return redirect ('notification_page')
+        else:
+            messages.warning(request, 'You don\'t have access to this page')
+            return redirect ('notification_page')
+    else:
+        return redirect ('login_page')
+
+    context = {
+        'form' : form,
     }
-    return render (request, '.html', context)
+    return render (request, 'product_form.html', context)
 
 
 def return_product(request): #update?
@@ -75,7 +101,7 @@ def add_product(request):
             if request.method == 'POST':
                 p_form = ProductForm(request.POST, request.FILES)
                 if p_form.is_valid():
-                    p_form.save(commit=False)
+                    p_form.save()
                     messages.success(request, 'Product Added to shop successfully!')
                     return redirect ('notification_page')
         else:
@@ -90,20 +116,42 @@ def add_product(request):
     return render (request, 'product_form.html', context)
 
 
-def edit_product(request):
-    #if request.user.is_staff():
+def edit_product(request, product_id):
+    product = Product.objects.get(id=product_id)
+    form = ProductForm(instance = product)
 
-    return render (request, '.html', context)
+    if request.user.is_authenticated:
+        if request.user.is_staff:
+            form = ProductForm(instance = product)
+            if request.method == 'POST':
+                form = ProductForm(request.POST, request.FILES, instance = product)
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, 'Product edited successfully!')
+                    return redirect ('notification_page')
+        else:
+            messages.warning(request, 'You don\'t have access to this page')
+            return redirect ('notification_page')
+    else:
+        return redirect ('login_page')
+
+    context = {
+        'form' : form,
+    }
+    return render (request, 'product_form.html', context)
 
 
-def delete_product(request):
-    #if request.user.is_staff():
-
-    return render (request, '.html', context)
-
+def delete_product(request, product_id):
+    if request.user.is_staff:
+        product = Product.objects.get(id=product_id)
+        product.delete()
+        messages.success(request, 'Product deleted successfully!')
+        return redirect('product_list')
+    else:
+        messages.warning(request, 'You don\'t have access to this page')
+        return redirect ('notification_page')
 
 """
-
 Main pages on nav bar
 
 """
@@ -142,7 +190,7 @@ def contact(request):
 
 def product_list(request):
     context = {
-        'product' : Product.objects.all()
+        'products' : Product.objects.all()
     }
     return render (request, 'product_list.html', context)
 
@@ -151,6 +199,15 @@ def product_list(request):
 administration pages
 
 """
+
+def octopus(request, octopus_id):
+    octopus = User.objects.get(id=octopus_id)
+
+    context = {
+        "octopus": octopus,
+    }
+    return render(request, 'octopus.html', context)
+
 
 def login_(request):
     form = LoginForm()
@@ -161,9 +218,10 @@ def login_(request):
             password = form.cleaned_data['password']
 
             user = authenticate(username=username, password=password)
-            if user is not None:
+            if user.is_staff:
                 login(request, user)
-                return redirect ('membership_page')
+                return redirect ('octopus_page', user.id)
+
 
     context = {
         'form' : form,
@@ -184,5 +242,9 @@ subpages of the main pages
 
 """
 
-def product_details(request):
-    return render (request, 'product_details.html', context)
+def product_details(request, product_id):
+    product = Product.objects.get(id=product_id)
+    context = {
+        "product": product,
+    }
+    return render(request, 'product_detail.html', context)

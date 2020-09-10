@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Rentals{% endblock title %}
+
+{% block content %}
+
+<div class="row">
+
+    {% for product in products %}
+    <div class="col-md-4">
+        <div class="card my-card">
+          {% if product.img %}
+            <img class="card-img-top" src="{{product.img.url}}" alt="Hey Noob, look at me...">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{product.name}}</h5>
+            <p class="card-text">{{product.price_per_day|truncatechars:25}}</p>
+            <p class="card-text">{{product.measures|truncatechars:25}}</p>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item text-center">
+                <a href="{% url 'product_details_page' product.id %}" class="btn btn-outline-dark">View</a>
+            </li>
+            <li class="list-group-item text-center">
+                <a href="#" class="btn btn-outline-dark">Rent it!</a>
+            </li>
+            {% if request.user.is_staff %}
+              <li class="list-group-item text-center">
+                  <a href="{% url 'rent_product_page' product.id%}" class="btn btn-outline-dark">Rent it to a cutomer</a>
+              </li>
+              <li class="list-group-item text-center">
+                  <a href="#" class="btn btn-outline-dark">Returned</a>
+              </li>
+              {% endif %}
+          </ul>
+        </div>
+    </div>
+    {% endfor %}
+
+    <div class="card-body">
+      <div class="row text-center">
+          {% if request.user.is_staff %}
+              <div class="col-md-4">
+                  <a href="{% url 'add_product_page' %}" class="btn btn-success btn-block">Add Items</a>
+              </div>
+          {% endif %}
+      </div>
+    </div>
+
+</div>
+{% endblock content %}
