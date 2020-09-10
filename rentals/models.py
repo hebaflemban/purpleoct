@@ -5,6 +5,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 from django.db.models.signals import post_save
 
 
+# Switch choices to models
 class Product(models.Model):
     COLOR_CHOICES =[("BL", "Black"),
                     ("WH", "White"),
@@ -56,7 +57,7 @@ class Product(models.Model):
     name          = models.CharField(max_length = 50)
     img           = models.ImageField(null=True, blank=True)
     measures      = models.CharField(max_length = 50, null = True, blank = True)
-    quantity      = models.IntegerField(null=True, blank = True) #throwing errors
+    quantity      = models.IntegerField(null=True, blank = True)
     description   = models.TextField(null = True, blank = True)
     price_per_day = models.FloatField()
     is_rented     = models.BooleanField(default= False)

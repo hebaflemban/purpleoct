@@ -25,15 +25,15 @@ urlpatterns = [
     path('purpleoctopus/<int:octopus_id>/', views.octopus, name = 'octopus_page'),
     path('purpleoctopus/login/', views.login_, name = 'login_page'),
     path('purpleoctopus/logout/', views.logout, name = 'logout_page'),
-    path('purpleoctopus/notif/', views.notification, name = 'notification_page'),
+    path('purpleoctopus/notification/', views.notification, name = 'notification_page'),
 
-    path('purpleoctopus/product_list/', views.product_list, name = 'product_list_page'),
-    path('purpleoctopus/product_details/<int:product_id>/', views.product_details, name = 'product_details_page'),
-    path('purpleoctopus/add_product/', views.add_product, name = 'add_product_page'),
-    path('purpleoctopus/edit_product/<int:product_id>/', views.edit_product, name = 'edit_product_page'),
-    path('purpleoctopus/delete_product/<int:product_id>/', views.delete_product, name = 'delete_product_page'),
+    path('purpleoctopus/products/', views.product_list, name = 'product_list_page'),
+    path('purpleoctopus/products/<int:product_id>/', views.product_details, name = 'product_details_page'),
+    path('purpleoctopus/products/add/', views.add_product, name = 'add_product_page'),
+    path('purpleoctopus/products/<int:product_id>/update/', views.edit_product, name = 'edit_product_page'),
+    path('purpleoctopus/products/<int:product_id>/delete/', views.delete_product, name = 'delete_product_page'),
 
-    path('purpleoctopus/rent_product/<int:product_id>/', views.rent_product, name = 'rent_product_page'),
+    path('purpleoctopus/products/<int:product_id>/rent/', views.rent_product, name = 'rent_product_page'),
 
     ]
 
