@@ -15,7 +15,25 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from rentals import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-]
+    path('purpleoctopus/membership/', views.membership_form, name = 'membership_page'),
+    path('purpleoctopus/login/', views.login, name = 'login_page'),
+    path('purpleoctopus/logout/', views.logout, name = 'logout_page'),
+    path('purpleoctopus/notif/', views.notification, name = 'notification_page'),
+
+    path('purpleoctopus/add_product/', views.add_product, name = 'add_product_page'),
+
+
+
+
+
+    ]
+
+if settings.DEBUG:
+    urlpatterns+=static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns+=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

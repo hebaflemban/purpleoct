@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+		Adding items to the store
+{% endblock title %}
+
+{% block content %}
+	<div class='container m-5 text-white'
+		<div class="card ">
+		  <h5 class="card-header">Purple Octopus Rentals</h5>
+		    <div class="card-body">
+		      <p class="card-text">
+		          <form action="{% url 'add_product_page' %}" method="POST" enctype="multipart/form-data">
+		              {% csrf_token %}
+                  {{p_form|crispy}}
+
+		              <input type="submit" value="Add" class="btn btn-outline-success">
+		          </form>
+		      </p>
+		    </div>
+		</div>
+	</div>
+
+{% endblock content %}
