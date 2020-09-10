@@ -14,7 +14,7 @@
 		          <form action="{% url 'membership_page' %}" method="POST" enctype="multipart/form-data">
 		              {% csrf_token %}
 		              {{form|crispy}}
-		              <input type="submit" value="Join" class="btn btn-outline-success">
+		              <input type="submit" value="Add a member" class="btn btn-outline-success">
 		          </form>
 		      </p>
 		    </div>
